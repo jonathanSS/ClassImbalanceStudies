@@ -1,0 +1,828 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     34946,        819]
+NotebookOptionsPosition[     34560,        800]
+NotebookOutlinePosition[     34968,        818]
+CellTagsIndexPosition[     34925,        815]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"Parameters", " ", "of", " ", "the", " ", "BINARY", " ", "model"}],
+    "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"sigma", "=", "1"}], ";", "\[IndentingNewLine]", "\t", 
+    RowBox[{"(*", 
+     RowBox[{"Optimal", " ", "line", " ", "for", " ", "the", " ", "BDR"}], 
+     "*)"}], "\[IndentingNewLine]", 
+    RowBox[{"R", ":=", " ", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"n", "\[Equal]", "0"}], ",", 
+       RowBox[{"-", "Infinity"}], ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"n", "\[Equal]", "1"}], ",", 
+         RowBox[{"+", "Infinity"}], ",", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"2", "*", 
+             RowBox[{"sigma", "^", "2"}], "*", 
+             RowBox[{"Log", "[", 
+              RowBox[{"n", "/", 
+               RowBox[{"(", 
+                RowBox[{"1", "-", "n"}], ")"}]}], "]"}]}], "-", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"0", "-", "d"}], ")"}], "^", "2"}], "+", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"0", "+", "d"}], ")"}], "^", "2"}]}], ")"}], "/", 
+          RowBox[{"(", 
+           RowBox[{"2", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{"0", "+", "d"}], ")"}], "-", 
+              RowBox[{"(", 
+               RowBox[{"0", "-", "d"}], ")"}]}], ")"}]}], ")"}]}]}], "]"}]}], 
+      "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+    RowBox[{"(*", 
+     RowBox[{
+     "Functions", " ", "to", " ", "measure", " ", "the", " ", "imbalance", 
+      " ", "degree"}], "*)"}], "\[IndentingNewLine]", "\t", 
+    RowBox[{"(*", 
+     RowBox[{"Kullback", "-", 
+      RowBox[{"Leibler", " ", "Divergence"}]}], "*)"}], "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"KL", "[", "n_", "]"}], ":=", " ", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"n", "==", "0"}], ",", " ", "\[IndentingNewLine]", 
+       RowBox[{"Return", "[", 
+        RowBox[{"N", "[", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"1", "-", "n"}], ")"}], 
+          RowBox[{"Log", "[", 
+           RowBox[{"2", 
+            RowBox[{"(", 
+             RowBox[{"1", "-", "n"}], ")"}]}], "]"}]}], "]"}], "]"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"1", "-", "n"}], ")"}], "\[Equal]", "0"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Return", "[", 
+          RowBox[{"N", "[", 
+           RowBox[{"n", " ", 
+            RowBox[{"Log", "[", 
+             RowBox[{"2", "n"}], "]"}]}], "]"}], "]"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Return", "[", 
+          RowBox[{"N", "[", 
+           RowBox[{
+            RowBox[{"n", " ", 
+             RowBox[{"Log", "[", 
+              RowBox[{"2", "n"}], "]"}]}], "+", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"1", "-", "n"}], ")"}], 
+             RowBox[{"Log", "[", 
+              RowBox[{"2", 
+               RowBox[{"(", 
+                RowBox[{"1", "-", "n"}], ")"}]}], "]"}]}]}], "]"}], "]"}]}], 
+        "]"}]}], "]"}]}], ";", "\[IndentingNewLine]", "\t", 
+    RowBox[{"(*", 
+     RowBox[{"Hellinger", " ", "Distance"}], "*)"}], "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"HE", "[", "n_", "]"}], ":=", 
+     RowBox[{"N", "[", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", "/", 
+         RowBox[{"Sqrt", "[", "2", "]"}]}], ")"}], "*", 
+       RowBox[{"Sqrt", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"Sqrt", "[", "n", "]"}], "-", 
+            RowBox[{"Sqrt", "[", 
+             RowBox[{"1", "/", "2"}], "]"}]}], ")"}], "^", "2"}], "+", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"Sqrt", "[", 
+             RowBox[{"1", "-", "n"}], "]"}], "-", 
+            RowBox[{"Sqrt", "[", 
+             RowBox[{"1", "/", "2"}], "]"}]}], ")"}], "^", "2"}]}], "]"}]}], 
+      "]"}]}], ";", "\[IndentingNewLine]", "\t", 
+    RowBox[{"(*", 
+     RowBox[{"Total", " ", "Variation", " ", "Distance"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"TV", "[", "n_", "]"}], ":=", " ", 
+     RowBox[{"N", "[", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", "/", "2"}], ")"}], "*", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"Abs", "[", 
+          RowBox[{"n", "-", 
+           RowBox[{"1", "/", "2"}]}], "]"}], "+", 
+         RowBox[{"Abs", "[", 
+          RowBox[{"1", " ", "-", " ", "n", "-", 
+           RowBox[{"1", "/", "2"}]}], "]"}]}], ")"}]}], "]"}]}], ";", 
+    "\[IndentingNewLine]", "\t", 
+    RowBox[{"(*", 
+     RowBox[{"Chi", "-", 
+      RowBox[{"Square", " ", "Distance"}]}], "*)"}], "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"CS", "[", "n_", "]"}], " ", ":=", " ", 
+     RowBox[{"N", "[", 
+      RowBox[{"2", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"n", "-", 
+            RowBox[{"1", "/", "2"}]}], ")"}], "^", "2"}], "+", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"1", "-", "n", "-", 
+            RowBox[{"1", "/", "2"}]}], ")"}], "^", "2"}]}], ")"}]}], "]"}]}], 
+    ";", "\[IndentingNewLine]", "\t", 
+    RowBox[{"(*", 
+     RowBox[{"Imbalance", " ", "Ratio"}], "*)"}], "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"IR", "[", "n_", "]"}], " ", ":=", " ", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"n", "/", 
+         RowBox[{"(", 
+          RowBox[{"1", "-", "n"}], ")"}]}], "<", "1"}], ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"1", "-", "n"}], ")"}], "/", "n"}], ",", 
+       RowBox[{"n", "/", 
+        RowBox[{"(", 
+         RowBox[{"1", "-", "n"}], ")"}]}]}], "]"}]}], ";", 
+    "\[IndentingNewLine]", "\[IndentingNewLine]", 
+    RowBox[{"Grid", "[", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"{", "\[IndentingNewLine]", 
+        RowBox[{"Row", "[", 
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"Plot", "[", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"Evaluate", "@", 
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{"PDF", "[", 
+                 RowBox[{
+                  RowBox[{"NormalDistribution", "[", 
+                   RowBox[{"mu", ",", "sigma"}], "]"}], ",", "x"}], "]"}], 
+                ",", 
+                RowBox[{"{", 
+                 RowBox[{"mu", ",", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"0", "-", "d"}], ",", 
+                    RowBox[{"0", "+", "d"}]}], "}"}]}], "}"}]}], "]"}]}], ",", 
+             RowBox[{"{", 
+              RowBox[{"x", ",", 
+               RowBox[{"-", "10"}], ",", "10"}], "}"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"Epilog", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"Thick", ",", "Dashed", ",", 
+                RowBox[{"Line", "[", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"R", ",", 
+                    RowBox[{"-", "100"}]}], "}"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{"R", ",", "100"}], "}"}]}], "}"}], "]"}]}], 
+               "}"}]}], ",", "\[IndentingNewLine]", 
+             RowBox[{"PlotLegends", "\[Rule]", 
+              RowBox[{"Placed", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"\"\<Class 1\>\"", ",", "\"\<Class 2\>\""}], "}"}], 
+                ",", "Bottom"}], "]"}]}], ",", "\[IndentingNewLine]", 
+             RowBox[{"PlotRange", " ", "\[Rule]", "All"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"PlotStyle", "\[Rule]", "Thick"}], ",", " ", 
+             "\[IndentingNewLine]", 
+             RowBox[{"Filling", "\[Rule]", " ", "Axis"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+             "PlotLabel", "\[Rule]", "\"\<Decision Regions of the BDR\>\""}], 
+             ",", "\[IndentingNewLine]", 
+             RowBox[{"ImageSize", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"300", ",", "200"}], "}"}]}]}], "]"}], 
+           "\[IndentingNewLine]", ",", "\[IndentingNewLine]", 
+           RowBox[{"Plot", "[", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"KL", "[", "n", "]"}], "/", 
+                RowBox[{"KL", "[", "1", "]"}]}], ",", 
+               RowBox[{
+                RowBox[{"HE", "[", "n", "]"}], "/", 
+                RowBox[{"HE", "[", "1", "]"}]}], ",", 
+               RowBox[{
+                RowBox[{"TV", "[", "n", "]"}], "/", 
+                RowBox[{"TV", "[", "1", "]"}]}], ",", 
+               RowBox[{
+                RowBox[{"CS", "[", "n", "]"}], "/", 
+                RowBox[{"CS", "[", "1", "]"}]}]}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"n", ",", "0", ",", "1"}], "}"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"Epilog", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"Thick", ",", 
+                RowBox[{"Line", "[", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"n", ",", 
+                    RowBox[{"-", "100"}]}], "}"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{"n", ",", "100"}], "}"}]}], "}"}], "]"}]}], 
+               "}"}]}], ",", "\[IndentingNewLine]", 
+             RowBox[{"PlotLegends", "\[Rule]", 
+              RowBox[{"Placed", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                 "\"\<KL\>\"", ",", "\"\<HE\>\"", ",", "\"\<TV\>\"", ",", 
+                  "\"\<CS\>\""}], "}"}], ",", "Bottom"}], "]"}]}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"PlotRange", " ", "\[Rule]", " ", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "1"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"PlotStyle", "->", "Thick"}], ",", "\[IndentingNewLine]", 
+             RowBox[{"ImageSize", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"300", ",", "200"}], "}"}]}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"PlotLabel", "\[Rule]", "\"\<Imbalance Degree\>\""}]}], 
+            "]"}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", "}"}], 
+         "]"}], "\[IndentingNewLine]", "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", "\[IndentingNewLine]", 
+        RowBox[{"Row", "[", 
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"Plot", "[", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"1", "-", 
+                RowBox[{"(", " ", 
+                 RowBox[{
+                  RowBox[{"n", "*", 
+                   RowBox[{"CDF", "[", 
+                    RowBox[{
+                    RowBox[{"NormalDistribution", "[", 
+                    RowBox[{
+                    RowBox[{"0", "-", "d"}], ",", "sigma"}], "]"}], ",", 
+                    "R"}], "]"}]}], "+", 
+                  RowBox[{
+                   RowBox[{"(", 
+                    RowBox[{"1", "-", "n"}], ")"}], "*", 
+                   RowBox[{"(", 
+                    RowBox[{"1", " ", "-", " ", 
+                    RowBox[{"CDF", "[", 
+                    RowBox[{
+                    RowBox[{"NormalDistribution", "[", 
+                    RowBox[{
+                    RowBox[{"0", "+", "d"}], ",", "sigma"}], "]"}], ",", 
+                    "R"}], "]"}]}], ")"}]}]}], ")"}]}], ",", 
+               RowBox[{"1", "-", " ", 
+                RowBox[{"Max", "[", 
+                 RowBox[{"n", ",", 
+                  RowBox[{"1", "-", "n"}]}], "]"}]}]}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"n", ",", "0", ",", "1"}], "}"}], ",", 
+             RowBox[{"Epilog", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"Thick", ",", 
+                RowBox[{"Line", "[", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"n", ",", 
+                    RowBox[{"1", "-", " ", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"n", "*", 
+                    RowBox[{"CDF", "[", 
+                    RowBox[{
+                    RowBox[{"NormalDistribution", "[", 
+                    RowBox[{
+                    RowBox[{"0", "-", "d"}], ",", "sigma"}], "]"}], ",", 
+                    "R"}], "]"}]}], "+", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"1", "-", "n"}], ")"}], "*", 
+                    RowBox[{"(", 
+                    RowBox[{"1", " ", "-", " ", 
+                    RowBox[{"CDF", "[", 
+                    RowBox[{
+                    RowBox[{"NormalDistribution", "[", 
+                    RowBox[{
+                    RowBox[{"0", "+", "d"}], ",", "sigma"}], "]"}], ",", 
+                    "R"}], "]"}]}], ")"}]}]}], ")"}]}]}], "}"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{"n", ",", 
+                    RowBox[{"1", "-", " ", 
+                    RowBox[{"Max", "[", 
+                    RowBox[{"n", ",", 
+                    RowBox[{"1", "-", "n"}]}], "]"}]}]}], "}"}]}], "}"}], 
+                 "]"}]}], "}"}]}], ",", 
+             RowBox[{"PlotRange", " ", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "1"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"PlotLegends", "\[Rule]", 
+              RowBox[{"Placed", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"\"\<BDR\>\"", ",", "\"\<ZeroR\>\""}], "}"}], ",", 
+                "Bottom"}], "]"}]}], ",", "\[IndentingNewLine]", 
+             RowBox[{"PlotStyle", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"Purple", ",", "Thick"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"Yellow", ",", "Thick"}], "}"}]}], "}"}]}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"Filling", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"1", "\[Rule]", 
+                RowBox[{"{", "2", "}"}]}], "}"}]}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+             "PlotLabel", "\[Rule]", "\"\<Error of the BDR and ZeroR\>\""}], 
+             ",", "\[IndentingNewLine]", 
+             RowBox[{"ImageSize", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"300", ",", "200"}], "}"}]}]}], "]"}], 
+           "\[IndentingNewLine]", ",", "\[IndentingNewLine]", 
+           RowBox[{"Plot", "[", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Sqrt", "[", 
+                RowBox[{
+                 RowBox[{"CDF", "[", 
+                  RowBox[{
+                   RowBox[{"NormalDistribution", "[", 
+                    RowBox[{
+                    RowBox[{"0", "-", "d"}], ",", "sigma"}], "]"}], ",", 
+                   "R"}], "]"}], "*", 
+                 RowBox[{"(", 
+                  RowBox[{"1", " ", "-", " ", 
+                   RowBox[{"CDF", "[", 
+                    RowBox[{
+                    RowBox[{"NormalDistribution", "[", 
+                    RowBox[{
+                    RowBox[{"0", "+", "d"}], ",", "sigma"}], "]"}], ",", 
+                    "R"}], "]"}]}], ")"}]}], "]"}], ",", "0"}], "}"}], 
+             "\[IndentingNewLine]", ",", 
+             RowBox[{"{", 
+              RowBox[{"n", ",", "0", ",", "1"}], "}"}], ",", 
+             RowBox[{"Epilog", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"Thick", ",", 
+                RowBox[{"Line", "[", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"n", ",", "0"}], "}"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{"n", ",", 
+                    RowBox[{"Sqrt", "[", 
+                    RowBox[{
+                    RowBox[{"CDF", "[", 
+                    RowBox[{
+                    RowBox[{"NormalDistribution", "[", 
+                    RowBox[{
+                    RowBox[{"0", "-", "d"}], ",", "sigma"}], "]"}], ",", 
+                    "R"}], "]"}], "*", 
+                    RowBox[{"(", 
+                    RowBox[{"1", " ", "-", " ", 
+                    RowBox[{"CDF", "[", 
+                    RowBox[{
+                    RowBox[{"NormalDistribution", "[", 
+                    RowBox[{
+                    RowBox[{"0", "+", "d"}], ",", "sigma"}], "]"}], ",", 
+                    "R"}], "]"}]}], ")"}]}], "]"}]}], "}"}]}], "}"}], "]"}]}],
+                "}"}]}], ",", 
+             RowBox[{"PlotRange", " ", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "1"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], ",", 
+             RowBox[{"PlotStyle", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"Purple", ",", "Thick"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"Yellow", ",", "Thick"}], "}"}]}], "}"}]}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"PlotLegends", "\[Rule]", 
+              RowBox[{"Placed", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"\"\<BDR\>\"", ",", "\"\<ZeroR\>\""}], "}"}], ",", 
+                "Bottom"}], "]"}]}], ",", "\[IndentingNewLine]", 
+             RowBox[{"Filling", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"2", "\[Rule]", 
+                RowBox[{"{", "1", "}"}]}], "}"}]}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+             "PlotLabel", "\[Rule]", "\"\<G-mean of the BDR and ZeroR\>\""}], 
+             ",", "\[IndentingNewLine]", 
+             RowBox[{"ImageSize", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"300", ",", "200"}], "}"}]}]}], "]"}]}], 
+          "\[IndentingNewLine]", "}"}], "]"}], "\[IndentingNewLine]", "}"}], 
+       ",", "\[IndentingNewLine]", 
+       RowBox[{"{", "\[IndentingNewLine]", 
+        RowBox[{"TableForm", "[", 
+         RowBox[{
+          RowBox[{"{", "\[IndentingNewLine]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Round", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"KL", "[", "n", "]"}], "/", 
+                RowBox[{"KL", "[", "1", "]"}]}], ",", "0.001"}], "]"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"Round", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"HE", "[", "n", "]"}], "/", 
+                RowBox[{"HE", "[", "1", "]"}]}], ",", "0.001"}], "]"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"Round", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"TV", "[", "n", "]"}], "/", 
+                RowBox[{"TV", "[", "1", "]"}]}], ",", "0.001"}], "]"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"Round", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"CS", "[", "n", "]"}], "/", 
+                RowBox[{"CS", "[", "1", "]"}]}], ",", "0.001"}], "]"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"Round", "[", 
+              RowBox[{
+               RowBox[{"IR", "[", "n", "]"}], ",", "0.001"}], "]"}]}], "}"}], 
+           "}"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"TableHeadings", "\[Rule]", " ", 
+           RowBox[{"{", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"Text", "[", "\"\<Values\>\"", "]"}], "}"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Text", "[", "\"\<KL\>\"", "]"}], ",", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Text", "[", "\"\<HE\>\"", "]"}], ",", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Text", "[", "\"\<TV\>\"", "]"}], ",", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Text", "[", "\"\<CS\>\"", "]"}], ",", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Text", "[", "\"\<IR\>\"", "]"}]}], "}"}]}], "}"}]}]}],
+          "]"}], "\[IndentingNewLine]", "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", "\[IndentingNewLine]", 
+        RowBox[{
+        "Text", "[", 
+         "\"\<Kullback-Leibler (KL), Hellinger (HE), Total Variation(TV), \
+Chi-Square (CS), Imbalance Ratio (IR)\>\"", "]"}], "}"}]}], 
+      "\[IndentingNewLine]", "}"}], "]"}]}], "\[IndentingNewLine]", ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"Style", "[", 
+    RowBox[{
+    "\"\<Parameters of the Binary Model\>\"", ",", "12", ",", "Bold"}], "]"}],
+    ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "d", ",", "1", ",", "\"\<Separation between the means (d)\>\""}], "}"}],
+      ",", "0.01", ",", "5"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "n", ",", "0.5", ",", "\"\<Prior probability of class 1 (\[Eta])\>\""}],
+       "}"}], ",", "0.01", ",", "0.99"}], "}"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"ContentSize", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"750", ",", "750"}], "}"}]}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.62436259315014*^9, 3.6243625931582212`*^9}, {
+   3.624362631058284*^9, 3.624362682785028*^9}, {3.624362721635435*^9, 
+   3.624362739195221*^9}, {3.6243627764714212`*^9, 3.6243629830101423`*^9}, {
+   3.624363057590942*^9, 3.6243630577419367`*^9}, {3.6243631083196898`*^9, 
+   3.624363146453019*^9}, {3.624363221827231*^9, 3.6243632809391003`*^9}, {
+   3.624363398910923*^9, 3.6243634695367002`*^9}, {3.624363499958859*^9, 
+   3.624363505614018*^9}, {3.6243637238103333`*^9, 3.624363924013627*^9}, {
+   3.6243639806110973`*^9, 3.624364002018503*^9}, {3.624364126488909*^9, 
+   3.624364144048849*^9}, {3.6243641806296587`*^9, 3.624364220193307*^9}, {
+   3.624364288749959*^9, 3.6243643199245987`*^9}, {3.6243644965655107`*^9, 
+   3.624364532989861*^9}, {3.6243645757277937`*^9, 3.6243646152578363`*^9}, {
+   3.624364726092355*^9, 3.624364732299509*^9}, 3.624364785764702*^9, {
+   3.6243648212213783`*^9, 3.624364858123304*^9}, {3.624365070690798*^9, 
+   3.624365156164336*^9}, {3.6243651894696493`*^9, 3.624365299435336*^9}, {
+   3.62436565431313*^9, 3.624365735738078*^9}, {3.624365797380233*^9, 
+   3.6243658722539663`*^9}, {3.624365903471496*^9, 3.624365911792055*^9}, {
+   3.624365961773903*^9, 3.624365966289288*^9}, {3.6243660147935543`*^9, 
+   3.624366029773342*^9}, {3.624366088253839*^9, 3.624366140255892*^9}, {
+   3.6243661885182953`*^9, 3.624366272280394*^9}, {3.62436642886513*^9, 
+   3.6243665467131357`*^9}, {3.6243667673184*^9, 3.624366873721493*^9}, {
+   3.624367005199665*^9, 3.6243670150782347`*^9}, {3.624367112502091*^9, 
+   3.624367253869835*^9}, {3.6243673196298428`*^9, 3.624367365743896*^9}, {
+   3.624367398179587*^9, 3.6243674992248697`*^9}, {3.624367532091372*^9, 
+   3.62436754269042*^9}, {3.6243675957376413`*^9, 3.624367665651672*^9}, 
+   3.6243677357711906`*^9, {3.6243678195934753`*^9, 3.624367892131905*^9}, {
+   3.624367947331202*^9, 3.624367966928851*^9}, {3.624368003595769*^9, 
+   3.624368066675275*^9}, {3.6243681710518913`*^9, 3.624368198001212*^9}, {
+   3.624368549461301*^9, 3.624368650182149*^9}, {3.624368680448435*^9, 
+   3.6243687591735363`*^9}, {3.6243688489354477`*^9, 
+   3.6243688849023867`*^9}, {3.624368919044335*^9, 3.624368976560741*^9}, {
+   3.624369034016746*^9, 3.6243691264140778`*^9}, {3.624369164591762*^9, 
+   3.624369169138893*^9}, {3.624369203722933*^9, 3.6243693363025837`*^9}, {
+   3.6243695676927567`*^9, 3.624369640811302*^9}, 3.62436967913515*^9, {
+   3.624369750925959*^9, 3.624369779689196*^9}, {3.6243698184174557`*^9, 
+   3.624369837222168*^9}, {3.624369907778508*^9, 3.624370031966153*^9}, {
+   3.624371467833271*^9, 3.62437184666356*^9}, {3.624371877126299*^9, 
+   3.624371940325573*^9}, {3.6243720310462112`*^9, 3.624372055180978*^9}, {
+   3.6243720859466*^9, 3.624372106344919*^9}, {3.624372167428974*^9, 
+   3.624372205954616*^9}, {3.624372507151425*^9, 3.6243726535147867`*^9}, {
+   3.6243727136324663`*^9, 3.6243729851927853`*^9}, {3.62437304024608*^9, 
+   3.624373076462084*^9}, {3.624373137047329*^9, 3.624373146544971*^9}, {
+   3.624373713632103*^9, 3.624373752812057*^9}, {3.624373784882947*^9, 
+   3.624373956963603*^9}, {3.624374010184589*^9, 3.624374118852818*^9}, {
+   3.6243741522425423`*^9, 3.624374170801037*^9}, {3.6243742787513103`*^9, 
+   3.6243743343686047`*^9}, 3.624374416469654*^9, {3.6243744575007677`*^9, 
+   3.624374609744643*^9}, 3.630928012878426*^9, {3.6309280975467453`*^9, 
+   3.630928100415277*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`d$$ = 0.64, $CellContext`n$$ = 
+    0.8180000000000001, Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{
+      Hold[
+       Style["Parameters of the Binary Model", 12, Bold]], 
+      Manipulate`Dump`ThisIsNotAControl}, {{
+       Hold[$CellContext`d$$], 1, "Separation between the means (d)"}, 0.01, 
+      5}, {{
+       Hold[$CellContext`n$$], 0.5, "Prior probability of class 1 (\[Eta])"}, 
+      0.01, 0.99}}, Typeset`size$$ = {
+    603., {258.634033203125, 264.365966796875}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = 
+    True, $CellContext`d$163980$$ = 0, $CellContext`n$163981$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`d$$ = 1, $CellContext`n$$ = 0.5}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`d$$, $CellContext`d$163980$$, 0], 
+        Hold[$CellContext`n$$, $CellContext`n$163981$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, 
+      "Body" :> ($CellContext`sigma = 1; $CellContext`R := 
+        If[$CellContext`n$$ == 0, -Infinity, 
+          If[$CellContext`n$$ == 1, 
+           Plus[
+           Infinity], ((2 $CellContext`sigma^2) 
+             Log[$CellContext`n$$/(1 - $CellContext`n$$)] - (
+             0 - $CellContext`d$$)^2 + (0 + $CellContext`d$$)^2)/(
+           2 ((0 + $CellContext`d$$) - (
+            0 - $CellContext`d$$)))]]; $CellContext`KL[
+          Pattern[$CellContext`n, 
+           Blank[]]] := If[$CellContext`n == 0, 
+          Return[
+           N[(1 - $CellContext`n) Log[2 (1 - $CellContext`n)]]], 
+          If[1 - $CellContext`n == 0, 
+           Return[
+            N[$CellContext`n Log[2 $CellContext`n]]], 
+           Return[
+            
+            N[$CellContext`n Log[2 $CellContext`n] + (1 - $CellContext`n) 
+              Log[2 (1 - $CellContext`n)]]]]]; $CellContext`HE[
+          Pattern[$CellContext`n, 
+           Blank[]]] := 
+        N[(1/Sqrt[2]) 
+          Sqrt[(Sqrt[$CellContext`n] - Sqrt[1/2])^2 + (
+              Sqrt[1 - $CellContext`n] - Sqrt[1/2])^2]]; $CellContext`TV[
+          Pattern[$CellContext`n, 
+           Blank[]]] := 
+        N[(1/2) (Abs[$CellContext`n - 1/2] + 
+           Abs[1 - $CellContext`n - 1/2])]; $CellContext`CS[
+          Pattern[$CellContext`n, 
+           Blank[]]] := 
+        N[2 (($CellContext`n - 1/2)^2 + (1 - $CellContext`n - 1/
+             2)^2)]; $CellContext`IR[
+          Pattern[$CellContext`n, 
+           Blank[]]] := 
+        If[$CellContext`n/(1 - $CellContext`n) < 
+          1, (1 - $CellContext`n)/$CellContext`n, $CellContext`n/(
+          1 - $CellContext`n)]; Grid[{{
+           Row[{
+             Plot[
+              Evaluate[
+               Table[
+                PDF[
+                 
+                 NormalDistribution[$CellContext`mu, $CellContext`sigma], \
+$CellContext`x], {$CellContext`mu, {
+                 0 - $CellContext`d$$, 
+                  0 + $CellContext`d$$}}]], {$CellContext`x, -10, 10}, 
+              Epilog -> {Thick, Dashed, 
+                Line[{{$CellContext`R, -100}, {$CellContext`R, 100}}]}, 
+              PlotLegends -> Placed[{"Class 1", "Class 2"}, Bottom], 
+              PlotRange -> All, PlotStyle -> Thick, Filling -> Axis, 
+              PlotLabel -> "Decision Regions of the BDR", 
+              ImageSize -> {300, 200}], 
+             
+             Plot[{$CellContext`KL[$CellContext`n$$]/$CellContext`KL[
+               1], $CellContext`HE[$CellContext`n$$]/$CellContext`HE[
+               1], $CellContext`TV[$CellContext`n$$]/$CellContext`TV[
+               1], $CellContext`CS[$CellContext`n$$]/$CellContext`CS[
+               1]}, {$CellContext`n$$, 0, 1}, Epilog -> {Thick, 
+                Line[{{$CellContext`n$$, -100}, {$CellContext`n$$, 100}}]}, 
+              PlotLegends -> Placed[{"KL", "HE", "TV", "CS"}, Bottom], 
+              PlotRange -> {{0, 1}, {0, 1}}, PlotStyle -> Thick, 
+              ImageSize -> {300, 200}, PlotLabel -> "Imbalance Degree"]}]}, {
+           Row[{
+             Plot[{1 - ($CellContext`n$$ CDF[
+                  NormalDistribution[
+                  0 - $CellContext`d$$, $CellContext`sigma], $CellContext`R] + \
+(1 - $CellContext`n$$) (1 - CDF[
+                  NormalDistribution[
+                  0 + $CellContext`d$$, $CellContext`sigma], \
+$CellContext`R])), 1 - 
+               Max[$CellContext`n$$, 
+                1 - $CellContext`n$$]}, {$CellContext`n$$, 0, 1}, 
+              Epilog -> {Thick, 
+                Line[{{$CellContext`n$$, 1 - ($CellContext`n$$ CDF[
+                    NormalDistribution[
+                    0 - $CellContext`d$$, $CellContext`sigma], \
+$CellContext`R] + (1 - $CellContext`n$$) (1 - CDF[
+                    NormalDistribution[
+                    0 + $CellContext`d$$, $CellContext`sigma], \
+$CellContext`R]))}, {$CellContext`n$$, 1 - 
+                   Max[$CellContext`n$$, 1 - $CellContext`n$$]}}]}, 
+              PlotRange -> {{0, 1}, {0, 1}}, PlotLegends -> 
+              Placed[{"BDR", "ZeroR"}, Bottom], 
+              PlotStyle -> {{Purple, Thick}, {Yellow, Thick}}, 
+              Filling -> {1 -> {2}}, PlotLabel -> 
+              "Error of the BDR and ZeroR", ImageSize -> {300, 200}], 
+             Plot[{
+               Sqrt[CDF[
+                  NormalDistribution[
+                  0 - $CellContext`d$$, $CellContext`sigma], $CellContext`R] (
+                 1 - CDF[
+                  NormalDistribution[
+                  0 + $CellContext`d$$, $CellContext`sigma], \
+$CellContext`R])], 0}, {$CellContext`n$$, 0, 1}, Epilog -> {Thick, 
+                Line[{{$CellContext`n$$, 0}, {$CellContext`n$$, 
+                   Sqrt[CDF[
+                    NormalDistribution[
+                    0 - $CellContext`d$$, $CellContext`sigma], \
+$CellContext`R] (1 - CDF[
+                    NormalDistribution[
+                    0 + $CellContext`d$$, $CellContext`sigma], \
+$CellContext`R])]}}]}, PlotRange -> {{0, 1}, {0, 1}}, 
+              PlotStyle -> {{Purple, Thick}, {Yellow, Thick}}, PlotLegends -> 
+              Placed[{"BDR", "ZeroR"}, Bottom], Filling -> {2 -> {1}}, 
+              PlotLabel -> "G-mean of the BDR and ZeroR", 
+              ImageSize -> {300, 200}]}]}, {
+           TableForm[{{
+              
+              Round[$CellContext`KL[$CellContext`n$$]/$CellContext`KL[1], 
+               0.001], 
+              
+              Round[$CellContext`HE[$CellContext`n$$]/$CellContext`HE[1], 
+               0.001], 
+              
+              Round[$CellContext`TV[$CellContext`n$$]/$CellContext`TV[1], 
+               0.001], 
+              
+              Round[$CellContext`CS[$CellContext`n$$]/$CellContext`CS[1], 
+               0.001], 
+              Round[
+               $CellContext`IR[$CellContext`n$$], 0.001]}}, TableHeadings -> {{
+               Text["Values"]}, {
+               Text["KL"], 
+               Text["HE"], 
+               Text["TV"], 
+               Text["CS"], 
+               Text["IR"]}}]}, {
+           Text[
+           "Kullback-Leibler (KL), Hellinger (HE), Total Variation(TV), \
+Chi-Square (CS), Imbalance Ratio (IR)"]}}]), "Specifications" :> {
+        Style[
+        "Parameters of the Binary Model", 12, 
+         Bold], {{$CellContext`d$$, 1, "Separation between the means (d)"}, 
+         0.01, 5}, {{$CellContext`n$$, 0.5, 
+          "Prior probability of class 1 (\[Eta])"}, 0.01, 0.99}}, 
+      "Options" :> {ContentSize -> {750, 750}}, "DefaultOptions" :> {}],
+     ImageSizeCache->{764., {427., 432.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{3.6309280323866453`*^9, 3.630928118921728*^9}]
+}, Open  ]]
+},
+WindowSize->{990, 1192},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+PrintingCopies->1,
+PrintingPageRange->{1, Automatic},
+FrontEndVersion->"10.1 for Mac OS X x86 (32-bit, 64-bit Kernel) (March 23, \
+2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 25608, 596, 1746, "Input"],
+Cell[26191, 620, 8353, 177, 876, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
